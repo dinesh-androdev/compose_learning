@@ -1,4 +1,4 @@
-package com.example.dineshcompose.ui.theme
+package com.example.dineshcompose.ui.activity.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

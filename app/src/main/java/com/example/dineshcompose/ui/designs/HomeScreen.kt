@@ -1,5 +1,7 @@
 package com.example.dineshcompose.ui.designs
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,22 +36,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.dineshcompose.model.BottomMenuContent
 import com.example.dineshcompose.model.Features
 import com.example.dineshcompose.R
-import com.example.dineshcompose.ui.theme.AquaBlue
-import com.example.dineshcompose.ui.theme.Beige1
-import com.example.dineshcompose.ui.theme.BlueViolet1
-import com.example.dineshcompose.ui.theme.ButtonBlue
-import com.example.dineshcompose.ui.theme.DarkerButtonBlue
-import com.example.dineshcompose.ui.theme.DeepBlue
-import com.example.dineshcompose.ui.theme.LightGreen1
-import com.example.dineshcompose.ui.theme.LightRed
-import com.example.dineshcompose.ui.theme.OrangeYellow1
-import com.example.dineshcompose.ui.theme.TextWhite
+import com.example.dineshcompose.navigation.Screen
+import com.example.dineshcompose.ui.activity.NavigationActivity
+import com.example.dineshcompose.ui.activity.ui.theme.AquaBlue
+import com.example.dineshcompose.ui.activity.ui.theme.Beige1
+import com.example.dineshcompose.ui.activity.ui.theme.BlueViolet1
+import com.example.dineshcompose.ui.activity.ui.theme.ButtonBlue
+import com.example.dineshcompose.ui.activity.ui.theme.DarkerButtonBlue
+import com.example.dineshcompose.ui.activity.ui.theme.DeepBlue
+import com.example.dineshcompose.ui.activity.ui.theme.LightGreen1
+import com.example.dineshcompose.ui.activity.ui.theme.LightRed
+import com.example.dineshcompose.ui.activity.ui.theme.OrangeYellow1
+import com.example.dineshcompose.ui.activity.ui.theme.TextWhite
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController, context: Context) {
     var selectedChipIndex by remember {
         mutableStateOf(0)
     }
@@ -72,7 +77,8 @@ fun HomeScreen() {
         Column {
             GreetingSection(
                 chipSelectedPosition = selectedChipIndex,
-                chipList
+                chipList,
+                context = context
             )
             ChipSection(
                 chips = chipList
@@ -81,7 +87,8 @@ fun HomeScreen() {
             }
             CurrentMeditation(
                 featuresPosition = selectedFeatureIndex,
-                featureItems = featuresArray
+                featureItems = featuresArray,
+                navController = navController
             )
             FeaturesSection(features = featuresArray) {
                 selectedFeatureIndex = it
@@ -122,7 +129,8 @@ fun getFeaturesArray(): List<Features> {
 fun GreetingSection(
     chipSelectedPosition: Int,
     chips: List<String>,
-    name: String = "Dinesh"
+    name: String = "Dinesh",
+    context: Context
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -151,6 +159,9 @@ fun GreetingSection(
             contentDescription = "Search",
             tint = Color.White,
             modifier = Modifier.size(24.dp)
+                .clickable {
+                    context.startActivity(Intent(context, NavigationActivity::class.java))
+                }
         )
 
     }
@@ -189,7 +200,8 @@ fun ChipSection(
 fun CurrentMeditation(
     color: Color = LightRed,
     featuresPosition: Int,
-    featureItems: List<Features>
+    featureItems: List<Features>,
+    navController: NavController
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -219,6 +231,9 @@ fun CurrentMeditation(
                 .clip(CircleShape)
                 .background(ButtonBlue)
                 .padding(15.dp)
+                .clickable {
+                    navController.navigate(Screen.DetailsScreen.withArgs(featureItems[featuresPosition].title))
+                }
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_play),

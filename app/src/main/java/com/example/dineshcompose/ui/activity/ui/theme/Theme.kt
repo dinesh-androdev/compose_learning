@@ -1,4 +1,4 @@
-package com.example.dineshcompose.ui.theme
+package com.example.dineshcompose.ui.activity.ui.theme
 
 import android.app.Activity
 import android.os.Build
